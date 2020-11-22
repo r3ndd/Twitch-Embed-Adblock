@@ -134,6 +134,10 @@ const compressor_on = 'M850 200C877.7 200 900 222.3 900 250V750C900 777.7 877.7 
                 document.querySelector(`[data-a-target="player-fullscreen-button"]`).click();
             else if (event.data == "theater")
                 document.querySelector(`[data-a-target="player-theatre-mode-button"]`).click();
+            else if (event.data.eventName == 'UPDATE_STATE' && event.data.params.quality)
+                if (/^((?:160|360|480|720|1080)p(?:30|60)|chunked)$/.test(event.data.params.quality))
+                    window.localStorage.setItem("embedQuality", event.data.params.quality);
+
         });
 
         var observer = new MutationObserver(function (mutations, observer) {
@@ -149,7 +153,7 @@ const compressor_on = 'M850 200C877.7 200 900 222.3 900 250V750C900 777.7 877.7 
                 return;
 
             var streamerName = window.location.pathname.replace("/", "");
-            var quality = "chunked";
+            var quality = window.localStorage.getItem("embedQuality") || "chunked";
             //var twitchUrl = `https://player.twitch.tv/?channel=${streamerName}&muted=false&parent=cdn.embedly.com&quality=${quality}`
             //var iframeUrl = `https://cdn.embedly.com/widgets/media.html?src=${encodeURIComponent(twitchUrl)}&type=text%2Fhtml&card=1&schema=twitch`;
             var iframeUrl = `https://player.twitch.tv/?channel=${streamerName.split("/")[0]}&muted=false&parent=twitch.tv&quality=${quality}`; // Not using an intermediate stream for now since it's faster
@@ -233,15 +237,7 @@ const compressor_on = 'M850 200C877.7 200 900 222.3 900 250V750C900 777.7 877.7 
             lastStreamer = streamerName
         });
 
-        var observeInterval = setInterval(() => {
-            var observee = document.getElementsByClassName("root-scrollable__wrapper tw-full-width tw-relative")[0];
-
-            if (!observee)
-                return;
-
-            observer.observe(observee, { attributes: false, childList: true, subtree: true });
-            clearInterval(observeInterval);
-        }, 100);
+        observer.observe(document.getElementsByClassName("root-scrollable__wrapper tw-full-width tw-relative")[0], { attributes: false, childList: true, subtree: true });
     }
 })();
 
