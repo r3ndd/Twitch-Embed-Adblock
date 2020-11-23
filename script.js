@@ -210,6 +210,9 @@ const compressor_on = 'M850 200C877.7 200 900 222.3 900 250V750C900 777.7 877.7 
                             }
                         }, 1000);
 
+                        // Finally, hide original player element
+                        el.style.display = "none";
+
                         return true;
                     }
                 }
