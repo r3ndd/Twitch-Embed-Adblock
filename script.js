@@ -236,8 +236,16 @@ const compressor_on = 'M850 200C877.7 200 900 222.3 900 250V750C900 777.7 877.7 
 
             lastStreamer = streamerName
         });
+        
+        var observeInterval = setInterval(() => {
+            var observee = document.getElementsByClassName("root-scrollable__wrapper tw-full-width tw-relative")[0];
 
-        observer.observe(document.getElementsByClassName("root-scrollable__wrapper tw-full-width tw-relative")[0], { attributes: false, childList: true, subtree: true });
+            if (!observee)
+                return;
+
+            observer.observe(observee, { attributes: false, childList: true, subtree: true });
+            clearInterval(observeInterval);
+        }, 100);
     }
 })();
 
