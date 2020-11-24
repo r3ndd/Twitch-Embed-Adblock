@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Twitch Adblock
 // @namespace    https://greasyfork.org/en/users/9694-croned
-// @version      1.3.10
-// @description  [Working as of 11/19/2020] Blocks Twitch livestream ads
+// @version      1.4.2
+// @description  [Working as of 11/23/2020] Blocks Twitch livestream ads
 // @author       FTwitch
 // @include      https://www.twitch.tv/*
 // @include      https://cdn.embedly.com/*
@@ -239,8 +239,16 @@ const compressor_on = 'M850 200C877.7 200 900 222.3 900 250V750C900 777.7 877.7 
 
             lastStreamer = streamerName
         });
+        
+        var observeInterval = setInterval(() => {
+            var observee = document.getElementsByClassName("root-scrollable__wrapper tw-full-width tw-relative")[0];
 
-        observer.observe(document.getElementsByClassName("root-scrollable__wrapper tw-full-width tw-relative")[0], { attributes: false, childList: true, subtree: true });
+            if (!observee)
+                return;
+
+            observer.observe(observee, { attributes: false, childList: true, subtree: true });
+            clearInterval(observeInterval);
+        }, 100);
     }
 })();
 
